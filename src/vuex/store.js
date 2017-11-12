@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 
-Vue.prototype.$http = axios.create({ baseURL: 'http://localhost:3000/' })
+Vue.prototype.$http = axios.create({ baseURL: 'http://35.197.130.87:80/' })
 
 Vue.use(Vuex)
 
@@ -119,13 +119,15 @@ let store = new Vuex.Store({
       })
     },
     loginFb (context) {
+      console.log('LOGIN!!!!')
       return new Promise((resolve, reject) => {
         window.FB.login(response => {
           const token = response.authResponse.accessToken
           const fbId = response.authResponse.userID
-
+          console.log('DAPET RESPON', {fb_token: token, fb_id: fbId})
           Vue.prototype.$http.get('/signin', {headers: {fb_token: token, fb_id: fbId}})
           .then(response => {
+            console.log('SERVER: response.data')
             context.commit('setUser', response.data.data.jwtoken)
             resolve()
           })
